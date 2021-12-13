@@ -15,6 +15,6 @@ exports.handler = async function(event, context) {
     //res.send(fics);
     return {
         statusCode: 200,
-        body: fics
+        body: `Tag: ${tagName} | Page Number: ${pageNumber}`,
     }
 }
