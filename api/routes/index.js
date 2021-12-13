@@ -4,6 +4,10 @@ const fanficController = require('../controllers');
 
 module.exports = (app) => {
     
+    app.get('/', (req, res) => {
+        res.json({'message': 'ok'});
+    });
+
     app.route('/tags/:tagName/:pageNumber')
         .get(fanficController.getAllFanficsOnPage);
 
