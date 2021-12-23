@@ -1,8 +1,6 @@
 'use strict'
 
-//const { response } = require('express');
-//const Fanfic = require('../models');
-const svc = require('../services');
+const svc = require('../services/util');
 
 async function getAllFanficsOnPage (req, res) {
     const pageNumber = req.params.pageNumber;
@@ -10,7 +8,7 @@ async function getAllFanficsOnPage (req, res) {
     const pageUrl = `http://archiveofourown.org/tags/${tag}/works?page=${pageNumber}`;
  
     let fics = [];
-    fics = await svc.scrapeFanFicsOnPage(pageUrl);
+    fics = await svc.scrapeFanficsOnPage(pageUrl);
     
     res.send(fics);
 }
@@ -23,7 +21,7 @@ async function getSpecificFanficOnPage(req, res){
     const pageUrl = `http://archiveofourown.org/tags/${tag}/works?page=${pageNumber}`;
  
     let fics = [];
-    fics = await svc.scrapeFanFicsOnPage(pageUrl);
+    fics = await svc.scrapeFanficsOnPage(pageUrl);
 
     res.send(fics[index]);
 }

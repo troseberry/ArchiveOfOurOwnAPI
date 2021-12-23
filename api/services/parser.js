@@ -1,67 +1,12 @@
-'use strict';
-
-//http://localhost:3500/tags/dcu/2
+'use strict'
 
 const cheerio = require('cheerio');
-const FanFic = require('../models');
-const axios = require('axios');
-
-function encodeTagForUrl(tag){
-    
-    // if tag is an empty string or whitespace only string
-    if (!(tag.replaceAll(' ', ''))) throw Error('Input tag cannot be empty.');
-    
-    var encodedTag = tag;
-    
-    // replacing ampersands | '&'
-    encodedTag = encodedTag.replaceAll('&', '*a*')
-
-    //replacing periods | '.'
-    encodedTag = encodedTag.replaceAll('.', '*d*')
-
-    // replace pipe | '|'
-    encodedTag = encodedTag.replaceAll('|', '%7C');
-
-    // replace pound | '#'
-    encodedTag = encodedTag.replaceAll('#', '*h*')
-
-    // replace question mark | '?'
-    encodedTag = encodedTag.replaceAll('?', '*q*')
-
-    // replace square brackets | '[' ']'
-    encodedTag = encodedTag.replaceAll('[', '%5B')
-    encodedTag = encodedTag.replaceAll(']', '%5D')
-
-    // replace white space chars
-    encodedTag = encodedTag.replaceAll(' ', '%20');
-
-    // bungles non-arabic alphabetic chars
-    //encodedTag = encodeURIComponent(encodedTag);
-
-    return encodedTag;
-}
-
-async function scrapeFanFicsOnPage(url){
-    let fics = [];
-
-    try{
-        const{data} = await axios.get(url);
-
-        const parser = new Parser();
-        fics = parser.ParsePageForFanFicObjects(data)
-
-    } catch(err) {
-        console.error(err);
-    }
-
-    return fics;
-}
-
+const Fanfic = require('../models');
 
 class Parser {
     constructor(){}
 
-    ParsePageForFanFicObjects(html){
+    ParsePageForFanficObjects(html){
         const $ = cheerio.load(html);
 
         let fics = [];
@@ -211,7 +156,7 @@ class Parser {
             _hits = $(work).find('dl.stats > dd.hits').text();
             //#endregion
 
-            fics.push(new FanFic(_id, _title, _author, _recipientAuthors, _fandoms, _requiredTags,
+            fics.push(new Fanfic(_id, _title, _author, _recipientAuthors, _fandoms, _requiredTags,
                                     _lastUpdated, _tags, _summary, _series, _seriesIds, _language, _wordCount,
                                     _chapterCount, _collections, _comments, _kudos, _bookmarks, _hits));
         });
@@ -220,8 +165,4 @@ class Parser {
     }
 }
 
-module.exports = {
-    scrapeFanFicsOnPage,
-    encodeTagForUrl,
-    Parser
-}
+module.exports = Parser;

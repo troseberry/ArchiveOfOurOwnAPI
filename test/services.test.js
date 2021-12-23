@@ -1,9 +1,9 @@
-const svc = require('../api/services');
+const svc = require('../api/services/util');
 const Fanfic = require('../api/models');
 const ctrl = require('../api/controllers');
 const axios = require('axios');
 
-describe('Tag Encoding for URL', () => {
+describe('Utility Tests - Tag Encoding for URL', () => {
     test('Encode - alphanumeric chars and spaces only', async () => {
         expect(svc.encodeTagForUrl('Marvel')).toStrictEqual('Marvel')
         expect(svc.encodeTagForUrl('Bandom')).toStrictEqual('Bandom')
@@ -39,7 +39,7 @@ describe('Tag Encoding for URL', () => {
     })
 })
 
-describe('Fanfic Parser', () => {
+describe('Parser Test - Tag Page', () => {
     var model = new Fanfic('28257258', 'The Instruments of Their Master', 'iberiandoctor (Jehane)', 'Kainosite', 'La Comédie Humaine - Honoré de Balzac, 19th Century CE France RPF', 'Explicit, Choose Not To Use Archive Warnings, M/M, Multi, Complete Work', '01 Jan 2021', 
     'Creator Chose Not To Use Archive Warnings, referenced Corentin/Hulot (Comédie Humaine), Joseph Fouché/Corentin, Joseph Fouché/Jacques-Antoine Manuel, Corentin/Jacques-Antoine Manuel, Corentin (Comédie Humaine), Joseph Fouché, Jacques-Antoine Manuel, Unequal relationships, Pedagogy, Propaganda, Jealousy, Blowjobs, Politics, Yuleporn, Hate Sex, Crossover',
     'The Duke of Otranto had two protégés: one, a police spy; the other, a promising future Deputy. The lessons these men learned under his tutelage — none more during the Hundred Days, when the Republic hung on a knife’s edge of war and politics — left the one greater, the other more guilty.',
@@ -53,7 +53,7 @@ describe('Fanfic Parser', () => {
             const{data} = await axios.get('http://archiveofourown.org/series/2478010');
     
             const parser = new svc.Parser();
-            fics = parser.ParsePageForFanFicObjects(data)
+            fics = parser.ParsePageForFanficObjects(data)
     
         } catch(err) {
             console.error(err);
