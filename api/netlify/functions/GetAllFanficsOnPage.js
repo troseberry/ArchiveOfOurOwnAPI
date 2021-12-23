@@ -1,6 +1,6 @@
 'use strict'
 
-const svc = require('./../../services');
+const svc = require('../services/util');
 
 exports.handler = async function(event, context) {
     // your server-side functionality
