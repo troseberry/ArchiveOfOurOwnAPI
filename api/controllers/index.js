@@ -11,7 +11,7 @@ async function getAllFanficsOnPage (req, res) {
  
     let fics = [];
     fics = await svc.scrapeFanFicsOnPage(pageUrl);
-
+    
     res.send(fics);
 }
 

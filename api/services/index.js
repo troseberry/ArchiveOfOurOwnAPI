@@ -7,8 +7,37 @@ const FanFic = require('../models');
 const axios = require('axios');
 
 function encodeTagForUrl(tag){
-    var encodedTag = encodeURIComponent(tag);
+    
+    // if tag is an empty string or whitespace only string
+    if (!(tag.replaceAll(' ', ''))) throw Error('Input tag cannot be empty.');
+    
+    var encodedTag = tag;
+    
+    // replacing ampersands | '&'
+    encodedTag = encodedTag.replaceAll('&', '*a*')
+
+    //replacing periods | '.'
     encodedTag = encodedTag.replaceAll('.', '*d*')
+
+    // replace pipe | '|'
+    encodedTag = encodedTag.replaceAll('|', '%7C');
+
+    // replace pound | '#'
+    encodedTag = encodedTag.replaceAll('#', '*h*')
+
+    // replace question mark | '?'
+    encodedTag = encodedTag.replaceAll('?', '*q*')
+
+    // replace square brackets | '[' ']'
+    encodedTag = encodedTag.replaceAll('[', '%5B')
+    encodedTag = encodedTag.replaceAll(']', '%5D')
+
+    // replace white space chars
+    encodedTag = encodedTag.replaceAll(' ', '%20');
+
+    // bungles non-arabic alphabetic chars
+    //encodedTag = encodeURIComponent(encodedTag);
+
     return encodedTag;
 }
 
@@ -36,6 +65,11 @@ class Parser {
         const $ = cheerio.load(html);
 
         let fics = [];
+        
+        //console.log($.html());
+
+        var foundFics = $('li.work');
+        console.log(`found ${foundFics.length} fanfic list objects`);
         
         $('li.work').each( (topIndex, topElement) => {
             const work = topElement;
@@ -188,5 +222,6 @@ class Parser {
 
 module.exports = {
     scrapeFanFicsOnPage,
-    encodeTagForUrl
+    encodeTagForUrl,
+    Parser
 }
