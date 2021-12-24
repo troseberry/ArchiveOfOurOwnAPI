@@ -6,34 +6,35 @@
 const axios = require('axios');
 const Parser = require('./parser');
 
+
 function encodeTagForUrl(tag){
     
     // if tag is an empty string or whitespace only string
-    //if (!(tag.replaceAll(' ', ''))) throw Error('Input tag cannot be empty.');
+    if (!(tag.replace(/[' ']/g, ''))) throw Error('Input tag cannot be empty.');
     
     var encodedTag = tag;
     
     // replacing ampersands | '&'
-    encodedTag = encodedTag.replaceAll('&', '*a*')
+    encodedTag = encodedTag.replace(/['&']/g, '*a*')
 
     //replacing periods | '.'
-    encodedTag = encodedTag.replaceAll('.', '*d*')
+    encodedTag = encodedTag.replace(/['.']/g, '*d*')
 
     // replace pipe | '|'
-    encodedTag = encodedTag.replaceAll('|', '%7C');
+    encodedTag = encodedTag.replace(/['|']/g, '%7C');
 
     // replace pound | '#'
-    encodedTag = encodedTag.replaceAll('#', '*h*')
+    encodedTag = encodedTag.replace(/['#']/g, '*h*')
 
     // replace question mark | '?'
-    encodedTag = encodedTag.replaceAll('?', '*q*')
+    encodedTag = encodedTag.replace(/['?']/g, '*q*')
 
     // replace square brackets | '[' ']'
-    encodedTag = encodedTag.replaceAll('[', '%5B')
-    encodedTag = encodedTag.replaceAll(']', '%5D')
+    encodedTag = encodedTag.replace(/['[']/g, '%5B')
+    encodedTag = encodedTag.replace(/[']']/g, '%5D')
 
     // replace white space chars
-    encodedTag = encodedTag.replaceAll(' ', '%20');
+    encodedTag = encodedTag.replace(/[' ']/g, '%20');
 
     // bungles non-arabic alphabetic chars
     //encodedTag = encodeURIComponent(encodedTag);
