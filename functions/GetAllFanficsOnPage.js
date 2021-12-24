@@ -10,7 +10,7 @@ exports.handler = async function(event, context) {
     const pageUrl = `http://archiveofourown.org/tags/${tag}/works?page=${pageNumber}`;
     
     let fics = [];
-    fics = await svc.scrapeFanFicsOnPage(pageUrl);
+    fics = await svc.scrapeFanficsOnPage(pageUrl);
 
     //res.send(fics);
     return {
@@ -18,3 +18,5 @@ exports.handler = async function(event, context) {
         body: `Tag: ${tag} | Page Number: ${pageNumber}`,
     }
 }
+
+//http://localhost:55258/.netlify/functions/GetAllFanficsOnPage?tagName=dcu&pageNumber=1

@@ -9,7 +9,7 @@ const Parser = require('./parser');
 function encodeTagForUrl(tag){
     
     // if tag is an empty string or whitespace only string
-    if (!(tag.replaceAll(' ', ''))) throw Error('Input tag cannot be empty.');
+    //if (!(tag.replaceAll(' ', ''))) throw Error('Input tag cannot be empty.');
     
     var encodedTag = tag;
     
