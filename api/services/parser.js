@@ -96,7 +96,15 @@ class Parser {
             var foundReqTags = $(work).find('div.header > ul.required-tags > li > a > span');
             //console.log('Required Tags Count: ' + foundReqTags.length);
             foundReqTags.each( function(index, element) {
-                _requiredTags += $(element).text();
+                
+                if ($(element).text().includes(',')) {
+                    _requiredTags += '[';
+                    _requiredTags += $(element).text();
+                    _requiredTags += ']';
+                } else {
+                    _requiredTags += $(element).text();
+                }
+
                 if (index < foundReqTags.length - 1) {
                     _requiredTags += ', ';
                 }
