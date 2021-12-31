@@ -167,6 +167,19 @@ class Parser {
         //console.log("Parsed Fics: " + fics.length);
         return fics;
     }
+
+    GetChapterId(html, chapterNumber) {
+        const $ = cheerio.load(html);
+
+        return $('select#selected_id').children(`:nth-child(${chapterNumber})`).attr('value');
+        
+    }
+
+    GetWorkBodyContent(html) {
+        const $ = cheerio.load(html);
+
+        return $('div.workskin').html();
+    }
 }
 
 module.exports = Parser;

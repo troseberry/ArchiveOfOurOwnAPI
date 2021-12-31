@@ -58,7 +58,28 @@ async function scrapeFanficsOnPage(url){
     return fics;
 }
 
+async function scrapeWorkBodyContentForChapter(id, chapterNumber){
+    const workUrl = `https://archiveofourown.org/works/${id}`;
+    let bodyContent = '';
+
+    try{
+        const{data} = await axios.get(workUrl);
+        
+        const parser = new Parser();
+        var chapterId = parser.GetChapterId(data, chapterNumber)
+        var fullUrl = `${workUrl}/chapters/${chapterId}`;
+
+        const{workData} = await axios.get(fullUrl);
+        bodyContent = parser.GetWorkBodyContent(workData)
+    } catch(err) {
+        console.error(err);
+    }
+
+    return bodyContent;
+}
+
 module.exports = {
     scrapeFanficsOnPage,
-    encodeTagForUrl
+    encodeTagForUrl,
+    scrapeWorkBodyContentForChapter
 }
