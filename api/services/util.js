@@ -63,13 +63,18 @@ async function scrapeWorkBodyContentForChapter(id, chapterNumber){
     let bodyContent = '';
 
     try{
-        const{data} = await axios.get(workUrl);
+        //const{data} = await axios.get(workUrl + '?view_adult=true');
+        const{data} = await axios.get('https://archiveofourown.org/works/35308720?view_adult=true')
         
         const parser = new Parser();
         var chapterId = parser.GetChapterId(data, chapterNumber)
-        var fullUrl = `${workUrl}/chapters/${chapterId}`;
+        //var fullUrl = `${workUrl}/chapters/${chapterId}?view_adult=true`;
 
-        const{workData} = await axios.get(fullUrl);
+        //console.log('Full url: ' + fullUrl);
+        console.log('Chapter ID: ' + chapterId);
+
+        //const{workData} = await axios.get(fullUrl);
+        const{workData} = await axios.get('https://archiveofourown.org/works/35308720/chapters/87998206?view_adult=true');
         bodyContent = parser.GetWorkBodyContent(workData)
     } catch(err) {
         console.error(err);

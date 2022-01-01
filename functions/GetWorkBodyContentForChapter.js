@@ -14,3 +14,7 @@ exports.handler = async function(event, context){
         body: JSON.stringify(bodyContent),
     }
 }
+
+
+//https://ao3api.netlify.app/.netlify/functions/GetWorkBodyContentForChapter?workId=35308720&chapterNumber=2
+//http://localhost:51499/GetWorkBodyContentForChapter?workId=35308720&chapterNumber=2

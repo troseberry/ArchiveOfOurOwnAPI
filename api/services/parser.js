@@ -171,6 +171,10 @@ class Parser {
     GetChapterId(html, chapterNumber) {
         const $ = cheerio.load(html);
 
+            console.log('Chapters:' + $.html())
+
+            //console.log('Chapters:' + $('ul.work.navigation.actions').find('li:nth-of-type(4) > ul > li > form > p > select > option:nth-of-type(1)').text())
+
         return $('select#selected_id').children(`:nth-child(${chapterNumber})`).attr('value');
         
     }
