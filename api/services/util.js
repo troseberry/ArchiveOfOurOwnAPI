@@ -58,33 +58,42 @@ async function scrapeFanficsOnPage(url){
     return fics;
 }
 
-async function scrapeWorkBodyContentForChapter(id, chapterNumber){
-    const workUrl = `https://archiveofourown.org/works/${id}`;
-    let bodyContent = '';
+async function getIdForChapter(id, lastChapterId, chapterNumber){
+    const workUrl = `https://archiveofourown.org/works/${id}/chapters/${lastChapterId}?view_adult=true`;
+    
+    let chapterId = '';
 
     try{
-        //const{data} = await axios.get(workUrl + '?view_adult=true');
-        const{data} = await axios.get('https://archiveofourown.org/works/35308720?view_adult=true')
-        
+        const{data} = await axios.get(workUrl);
         const parser = new Parser();
-        var chapterId = parser.GetChapterId(data, chapterNumber)
-        //var fullUrl = `${workUrl}/chapters/${chapterId}?view_adult=true`;
-
-        //console.log('Full url: ' + fullUrl);
-        console.log('Chapter ID: ' + chapterId);
-
-        //const{workData} = await axios.get(fullUrl);
-        const{workData} = await axios.get('https://archiveofourown.org/works/35308720/chapters/87998206?view_adult=true');
-        bodyContent = parser.GetWorkBodyContent(workData)
+        chapterId = parser.GetChapterId(data, chapterNumber)
     } catch(err) {
         console.error(err);
     }
 
+    return chapterId;
+}
+
+async function scrapeWorkBodyContentForChapter(workId, chapterId){
+    const chapterUrl = `https://archiveofourown.org/works/${workId}/chapters/${chapterId}?view_adult=true`;
+    
+    let bodyContent = '';
+
+    try {
+        const{data} = await axios.get(chapterUrl);
+        const parser = new Parser();
+        bodyContent = parser.GetWorkBodyContent(data);
+    } catch (err) {
+        console.error(err);
+    }
+
+    //console.log('Body Content: ' + bodyContent);
     return bodyContent;
 }
 
 module.exports = {
     scrapeFanficsOnPage,
     encodeTagForUrl,
+    getIdForChapter,
     scrapeWorkBodyContentForChapter
 }

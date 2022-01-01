@@ -5,9 +5,12 @@ const svc = require('../api/services/util');
 
 exports.handler = async function(event, context){
     const workId = event.queryStringParameters.workId;
+    const lastChapterId = event.queryStringParameters.lastId;
     const chapterNumber = event.queryStringParameters.chapterNumber;
 
-    var bodyContent = svc.scrapeWorkBodyContentForChapter(workId, chapterNumber);
+    var chapterId = await svc.getIdForChapter(workId, lastChapterId, chapterNumber);
+
+    var bodyContent = await svc.scrapeWorkBodyContentForChapter(workId, chapterId);
 
     return {
         statusCode: 200,

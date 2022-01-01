@@ -3,7 +3,7 @@
 class Fanfic {
     constructor(id, title, author, recipientUsers = '', fandoms = '', requiredTags = '',
                 lastUpdated = '', tags = '', summary = '', series = '', seriesIds = '', language = '', wordCount = '',
-                chapterCount = '', collections = '', comments = '', kudos = '', bookmarks = '', hits = '') {
+                chapterCount = '', collections = '', comments = '', kudos = '', bookmarks = '', hits = '', latestChapterId = '') {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -26,6 +26,8 @@ class Fanfic {
         this.kudos = kudos;
         this.bookmarks = bookmarks;
         this.hits = hits;
+
+        this.latestChapterId = latestChapterId;
     }
 }
 

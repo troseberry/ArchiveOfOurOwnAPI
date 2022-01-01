@@ -42,6 +42,8 @@ class Parser {
             var _kudos = '';
             var _bookmarks = '';
             var _hits = '';
+
+            var _latestChapterUrl = '';
             //#endregion
             
             //#region ID
@@ -152,7 +154,10 @@ class Parser {
             //#region Stats
             _language = $(work).find('dl.stats > dd.language').text();
             _wordCount = $(work).find('dl.stats > dd.words').text();
+
             _chapterCount = $(work).find('dl.stats > dd.chapters').text();
+            _latestChapterUrl = $(work).find('dl.stats > dd.chapters > a').attr('href').split('\'')[3];
+
             _collections = $(work).find('dl.stats > dd.collections').text();
             _comments = $(work).find('dl.stats > dd.comments').text();
             _kudos = $(work).find('dl.stats > dd.kudos').text();
@@ -171,9 +176,7 @@ class Parser {
     GetChapterId(html, chapterNumber) {
         const $ = cheerio.load(html);
 
-            console.log('Chapters:' + $.html())
-
-            //console.log('Chapters:' + $('ul.work.navigation.actions').find('li:nth-of-type(4) > ul > li > form > p > select > option:nth-of-type(1)').text())
+        //console.log('Chapters:' + $('select#selected_id').children().length);
 
         return $('select#selected_id').children(`:nth-child(${chapterNumber})`).attr('value');
         
@@ -182,7 +185,7 @@ class Parser {
     GetWorkBodyContent(html) {
         const $ = cheerio.load(html);
 
-        return $('div.workskin').html();
+        return $('div#workskin').html();
     }
 }
 
