@@ -43,7 +43,7 @@ class Parser {
             var _bookmarks = '';
             var _hits = '';
 
-            var _latestChapterUrl = '';
+            var _latestChapterId = '';
             //#endregion
             
             //#region ID
@@ -156,7 +156,12 @@ class Parser {
             _wordCount = $(work).find('dl.stats > dd.words').text();
 
             _chapterCount = $(work).find('dl.stats > dd.chapters').text();
-            _latestChapterUrl = $(work).find('dl.stats > dd.chapters > a').attr('href').split('\'')[3];
+
+            _latestChapterId = $(work).find('dl.stats > dd.chapters > a').attr('href');
+            if (_latestChapterId != '' && _latestChapterId != undefined) {
+                _latestChapterId = _latestChapterId.split('/')[4];
+            }
+
 
             _collections = $(work).find('dl.stats > dd.collections').text();
             _comments = $(work).find('dl.stats > dd.comments').text();
@@ -167,7 +172,7 @@ class Parser {
 
             fics.push(new Fanfic(_id, _title, _author, _recipientAuthors, _fandoms, _requiredTags,
                                     _lastUpdated, _tags, _summary, _series, _seriesIds, _language, _wordCount,
-                                    _chapterCount, _collections, _comments, _kudos, _bookmarks, _hits));
+                                    _chapterCount, _collections, _comments, _kudos, _bookmarks, _hits, _latestChapterId));
         });
         //console.log("Parsed Fics: " + fics.length);
         return fics;

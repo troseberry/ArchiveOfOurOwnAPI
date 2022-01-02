@@ -3,8 +3,7 @@
 const svc = require('../api/services/util');
 
 exports.handler = async function(event, context) {
-    // your server-side functionality
-
+    
     const pageNumber = event.queryStringParameters.pageNumber;
     const tag = svc.encodeTagForUrl(event.queryStringParameters.tagName);
     const pageUrl = `http://archiveofourown.org/tags/${tag}/works?page=${pageNumber}`;
