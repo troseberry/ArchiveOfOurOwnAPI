@@ -1,12 +1,13 @@
 'use strict'
 
 const cheerio = require('cheerio');
+const res = require('express/lib/response');
 const Fanfic = require('../models');
 
 class Parser {
     constructor(){}
 
-    ParsePageForFanficObjects(html){
+    parsePageForFanficObjects(html){
         const $ = cheerio.load(html);
 
         let fics = [];
@@ -178,7 +179,7 @@ class Parser {
         return fics;
     }
 
-    GetChapterId(html, chapterNumber) {
+    getChapterId(html, chapterNumber) {
         const $ = cheerio.load(html);
 
         //console.log('Chapters:' + $('select#selected_id').children().length);
@@ -187,10 +188,22 @@ class Parser {
         
     }
 
-    GetWorkBodyContent(html) {
+    getWorkBodyContent(html) {
         const $ = cheerio.load(html);
 
         return $('div#workskin').html();
+    }
+
+    checkHtmlForProceedLink(html) {
+        const $ = cheerio.load(html);
+
+        var result = $('div#main > ul.actions > li:nth-of-type(1) > a');
+
+        if (result.text() == 'Proceed') {
+            return $(result).attr('href');
+        }
+
+        return undefined;
     }
 }
 

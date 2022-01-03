@@ -49,7 +49,7 @@ async function scrapeFanficsOnPage(url){
         const{data} = await axios.get(url);
 
         const parser = new Parser();
-        fics = parser.ParsePageForFanficObjects(data)
+        fics = parser.parsePageForFanficObjects(data)
 
     } catch(err) {
         console.error(err);
@@ -66,7 +66,7 @@ async function getIdForChapter(id, lastChapterId, chapterNumber){
     try{
         const{data} = await axios.get(workUrl);
         const parser = new Parser();
-        chapterId = parser.GetChapterId(data, chapterNumber)
+        chapterId = parser.getChapterId(data, chapterNumber)
     } catch(err) {
         console.error(err);
     }
@@ -75,20 +75,53 @@ async function getIdForChapter(id, lastChapterId, chapterNumber){
 }
 
 async function scrapeWorkBodyContentForChapter(workId, chapterId){
-    const chapterUrl = `https://archiveofourown.org/works/${workId}/chapters/${chapterId}?view_adult=true`;
-    
-    let bodyContent = '';
+    var chapterUrl = '';
+    var bodyContent = '';
 
-    try {
+    if (chapterId == '' || chapterId == undefined)
+    {
+        chapterUrl = `https://archiveofourown.org/works/${workId}?view_adult=true`;
+    } else {
+        chapterUrl = `https://archiveofourown.org/works/${workId}/chapters/${chapterId}?view_adult=true`;
+    }
+    try{
+        var proceedResult = await checkForProceedRedirectLink(chapterUrl);
+
+        //console.log('Proceed Result: ' + proceedResult);
+
+        if (proceedResult != undefined) {
+            chapterUrl = 'https://archiveofourown.org' + proceedResult
+        }
+    
+        //console.log('Chapter URL: ' + chapterUrl)
+
+
         const{data} = await axios.get(chapterUrl);
         const parser = new Parser();
-        bodyContent = parser.GetWorkBodyContent(data);
+        bodyContent = parser.getWorkBodyContent(data);
     } catch (err) {
         console.error(err);
     }
 
-    //console.log('Body Content: ' + bodyContent);
     return bodyContent;
+}
+
+async function checkForProceedRedirectLink(chapterUrl) {
+    var resultValue = undefined;
+    try {
+        const parser = new Parser();
+        const{data} = await axios.get(chapterUrl);
+        
+        resultValue = parser.checkHtmlForProceedLink(data)
+    } catch (err) {
+        console.error(err);
+    }
+
+    const resultPromise = new Promise((resolve, reject) => {
+        resolve(resultValue);
+    });
+
+    return resultPromise;
 }
 
 module.exports = {
