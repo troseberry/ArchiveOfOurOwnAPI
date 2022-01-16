@@ -74,6 +74,24 @@ async function getIdForChapter(id, lastChapterId, chapterNumber){
     return chapterId;
 }
 
+async function checkForProceedRedirectLink(chapterUrl) {
+    var resultValue = undefined;
+    try {
+        const parser = new Parser();
+        const{data} = await axios.get(chapterUrl);
+        
+        resultValue = parser.checkHtmlForProceedLink(data)
+    } catch (err) {
+        console.error(err);
+    }
+
+    const resultPromise = new Promise((resolve, reject) => {
+        resolve(resultValue);
+    });
+
+    return resultPromise;
+}
+
 async function scrapeWorkBodyContentForChapter(workId, chapterId){
     var chapterUrl = '';
     var bodyContent = '';
@@ -84,6 +102,7 @@ async function scrapeWorkBodyContentForChapter(workId, chapterId){
     } else {
         chapterUrl = `https://archiveofourown.org/works/${workId}/chapters/${chapterId}?view_adult=true`;
     }
+
     try{
         var proceedResult = await checkForProceedRedirectLink(chapterUrl);
 
@@ -106,27 +125,38 @@ async function scrapeWorkBodyContentForChapter(workId, chapterId){
     return bodyContent;
 }
 
-async function checkForProceedRedirectLink(chapterUrl) {
-    var resultValue = undefined;
+async function getChaptersForFanfic(workId, lastChapterId) {
+    let chapters = [];
+    var url = '';
+
+    if (lastChapterId == '' || lastChapterId == undefined)
+    {
+        url = `https://archiveofourown.org/works/${workId}?view_adult=true`;
+    } else {
+        url = `https://archiveofourown.org/works/${workId}/chapters/${lastChapterId}?view_adult=true`;
+    }
+
     try {
+        var proceedResult = await checkForProceedRedirectLink(url);
+        if (proceedResult != undefined) {
+            url = 'https://archiveofourown.org' + proceedResult;
+        }
+
+        const{data} = await axios.get(url);
         const parser = new Parser();
-        const{data} = await axios.get(chapterUrl);
-        
-        resultValue = parser.checkHtmlForProceedLink(data)
+        chapters = parser.getWorkChapters(data);
+
     } catch (err) {
         console.error(err);
     }
 
-    const resultPromise = new Promise((resolve, reject) => {
-        resolve(resultValue);
-    });
-
-    return resultPromise;
+    return chapters;
 }
 
 module.exports = {
     scrapeFanficsOnPage,
     encodeTagForUrl,
     getIdForChapter,
-    scrapeWorkBodyContentForChapter
+    scrapeWorkBodyContentForChapter,
+    getChaptersForFanfic
 }

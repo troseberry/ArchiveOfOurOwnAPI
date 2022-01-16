@@ -205,6 +205,23 @@ class Parser {
 
         return undefined;
     }
+
+    getWorkChapters(html) {
+        const $ = cheerio.load(html);
+
+        let chapters = [];
+
+        $('select#selected_id > option').each( (index, element) => {
+            var chapterItem = {
+                id: $(element).attr('value'),
+                title: $(element).text()
+            };
+
+            chapters.push(chapterItem);
+        })
+
+        return chapters;
+    }
 }
 
 module.exports = Parser;
