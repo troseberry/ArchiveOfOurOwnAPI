@@ -153,10 +153,21 @@ async function getChaptersForFanfic(workId, lastChapterId) {
     return chapters;
 }
 
+function getStringIfNotUndefined(str) {
+    let testStr = '' + str;
+
+    if (testStr.length > 0 && testStr != 'undefined') {
+        return testStr;
+    } else {
+        return '';
+    }
+}
+
 module.exports = {
     scrapeFanficsOnPage,
     encodeTagForUrl,
     getIdForChapter,
     scrapeWorkBodyContentForChapter,
-    getChaptersForFanfic
+    getChaptersForFanfic,
+    getStringIfNotUndefined
 }
