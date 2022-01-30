@@ -15,29 +15,30 @@ function encodeTagForUrl(tag){
     var encodedTag = tag;
     
     // replacing ampersands | '&'
-    encodedTag = encodedTag.replace(/['&']/g, '*a*');
+    //encodedTag = encodedTag.replace(/[&]/g, '*a*');
+    encodedTag = encodedTag.split('&').join('*a*');
 
     //replacing periods | '.'
-    encodedTag = encodedTag.replace(/['.']/g, '*d*');
+    encodedTag = encodedTag.split('.').join('*d*');
 
     // replace pipe | '|'
-    encodedTag = encodedTag.replace(/['|']/g, '%7C');
+    encodedTag = encodedTag.split('|').join('%7C');
 
     // replace pound | '#'
-    encodedTag = encodedTag.replace(/['#']/g, '*h*');
+    encodedTag = encodedTag.split('#').join('*h*');
 
     // replace question mark | '?'
-    encodedTag = encodedTag.replace(/['?']/g, '*q*');
+    encodedTag = encodedTag.split('?').join('*q*');
 
     // replace square brackets | '[' ']'
-    encodedTag = encodedTag.replace(/['[']/g, '%5B');
-    encodedTag = encodedTag.replace(/[']']/g, '%5D');
+    encodedTag = encodedTag.split('[').join('%5B');
+    encodedTag = encodedTag.split(']').join('%5D');
 
     // replace white space chars
-    encodedTag = encodedTag.replace(/[' ']/g, '%20');
+    encodedTag = encodedTag.split(' ').join('%20');
 
     // replace back slash | '/'
-    encodedTag = encodedTag.replace(/['/']/g, '*s*');
+    encodedTag = encodedTag.split('/').join('*s*');
 
     // bungles non-arabic alphabetic chars
     //encodedTag = encodeURIComponent(encodedTag);
