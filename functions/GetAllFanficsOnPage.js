@@ -49,6 +49,34 @@ function getIdFromKnownTag(tag) {
     }
 }
 
+function getSortStrFromQuery(query) {
+    var lowerQuery = '' + query;
+    lowerQuery = lowerQuery.toLowerCase();
+
+    switch(lowerQuery) {
+        case 'author':
+            return 'authors_to_sort_on';
+        case 'title':
+            return 'title_to_sort_on';
+        case 'datePosted':
+            return 'created_at';
+        case 'dateUpdated':
+            return 'revised_at';
+        case 'wordCount':
+            return 'word_count';
+        case 'hits':
+            return 'hits';
+        case 'kudos':
+            return 'kudos_count';
+        case 'comments':
+            return 'comments_count';
+        case 'bookmarks':
+            return 'bookmarks_count';
+        default:
+            break;
+    }
+}
+
 exports.handler = async function(event, context) {
     
     const pageNumber = event.queryStringParameters.pageNumber;
@@ -59,11 +87,11 @@ exports.handler = async function(event, context) {
     const crossoverQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.crossover);
     const dateFromQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.dateFrom);
     const dateToQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.dateTo);
-    const excludedTagsQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.excludedTags);
+    const otherIncludedTagsQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.otherIncludedTags);
+    const otherExcludedTagsQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.otherExcludedTags);
     const languageQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.language);
-    const otherTagsQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.otherTags);
     const searchWithinQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.searchWithinResults);
-    const sortQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.sort);
+    const sortQuery =  getSortStrFromQuery(svc.getStringIfNotUndefined(event.queryStringParameters.sort));
     const wordsFromQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.wordsFrom);
     const wordsToQuery =  svc.getStringIfNotUndefined(event.queryStringParameters.wordsTo);
 
@@ -92,9 +120,9 @@ exports.handler = async function(event, context) {
     pageUrl +=`&work_search%5Bcrossover%5D=${crossoverQuery}`;
     pageUrl +=`&work_search%5Bdate_from%5D=${dateFromQuery}`;
     pageUrl +=`&work_search%5Bdate_to%5D=${dateToQuery}`;
-    pageUrl +=`&work_search%5Bexcluded_tag_names%5D=${excludedTagsQuery}`;
+    pageUrl +=`&work_search%5Bexcluded_tag_names%5D=${otherExcludedTagsQuery}`;
     pageUrl +=`&work_search%5Blanguage_id%5D=${languageQuery}`;
-    pageUrl +=`&work_search%5Bother_tag_names%5D=${otherTagsQuery}`;
+    pageUrl +=`&work_search%5Bother_tag_names%5D=${otherIncludedTagsQuery}`;
     pageUrl +=`&work_search%5Bquery%5D=${searchWithinQuery}`;
     pageUrl +=`&work_search%5Bsort_column%5D=${sortQuery}`;
     pageUrl +=`&work_search%5Bwords_from%5D=${wordsFromQuery}`;
