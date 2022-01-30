@@ -73,7 +73,7 @@ function getSortStrFromQuery(query) {
         case 'bookmarks':
             return 'bookmarks_count';
         default:
-            break;
+            return 'revised_at';
     }
 }
 
