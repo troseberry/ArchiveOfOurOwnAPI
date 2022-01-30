@@ -120,7 +120,7 @@ exports.handler = async function(event, context) {
     if (warningsExcludeQuery.length > 0) {
         let queries = warningsExcludeQuery.split(',');
         queries.forEach(element => {
-            console.log(``);
+            console.log(`Exclude Warning`);
             pageUrl += `&exclude_work_search%5Barchive_warning_ids%5D%5B%5D=${getIdFromKnownTag(element)}`;
         });
     }
