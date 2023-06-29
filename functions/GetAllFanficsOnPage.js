@@ -90,12 +90,20 @@ function getBaseUrlForPageType(pageType, searchQuery, pageNumber ) {
     }
 }
 
+function isPageTypeWorkSearchResultsPage(pageType)
+{
+    var lowerCaseTypeString = '' + pageType;
+    lowerCaseTypeString = lowerCaseTypeString.toLowerCase();
+    return lowerCaseTypeString == 'worksearchresultspage';
+}
+
 exports.handler = async function(event, context) {
     
     const pageType = event.queryStringParameters.pageType;
     const searchQuery = svc.encodeTagForUrl(event.queryStringParameters.searchQuery);
     const pageNumber = event.queryStringParameters.pageNumber;
     //const tag = svc.encodeTagForUrl(event.queryStringParameters.tagName);
+
 
     // always included queries
     const completionQuery = svc.getStringIfNotUndefined(event.queryStringParameters.completion);
@@ -141,7 +149,12 @@ exports.handler = async function(event, context) {
     pageUrl +=`&work_search%5Bexcluded_tag_names%5D=${otherExcludedTagsQuery}`;
     pageUrl +=`&work_search%5Blanguage_id%5D=${languageQuery}`;
     pageUrl +=`&work_search%5Bother_tag_names%5D=${otherIncludedTagsQuery}`;
-    pageUrl +=`&work_search%5Bquery%5D=${searchWithinQuery}`;
+
+    if (!isPageTypeWorkSearchResultsPage(pageType))
+    {
+        pageUrl +=`&work_search%5Bquery%5D=${searchWithinQuery}`;
+    }
+    
     pageUrl +=`&work_search%5Bsort_column%5D=${sortQuery}`;
     pageUrl +=`&work_search%5Bwords_from%5D=${wordsFromQuery}`;
     pageUrl +=`&work_search%5Bwords_to%5D=${wordsToQuery}`;
