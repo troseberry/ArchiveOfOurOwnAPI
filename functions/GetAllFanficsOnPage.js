@@ -77,10 +77,25 @@ function getSortStrFromQuery(query) {
     }
 }
 
+function getBaseUrlForPageType(pageType, searchQuery, pageNumber ) {
+    var lowerCaseTypeString = '' + pageType;
+    lowerCaseTypeString = lowerCaseTypeString.toLowerCase();
+
+    switch(lowerCaseTypeString)
+    {
+        case 'worksearchresultspage':
+            return `http://archiveofourown.org/works/search?work_search%5Bquery%5D=${searchQuery}&page=${pageNumber}`;
+        case 'tagworkspage':
+            return `http://archiveofourown.org/tags/${searchQuery}/works?commit=Sort+and+Filter&page=${pageNumber}&utf8=%E2%9C%93`;
+    }
+}
+
 exports.handler = async function(event, context) {
     
+    const pageType = event.queryStringParameters.pageType;
+    const searchQuery = svc.encodeTagForUrl(event.queryStringParameters.searchQuery);
     const pageNumber = event.queryStringParameters.pageNumber;
-    const tag = svc.encodeTagForUrl(event.queryStringParameters.tagName);
+    //const tag = svc.encodeTagForUrl(event.queryStringParameters.tagName);
 
     // always included queries
     const completionQuery = svc.getStringIfNotUndefined(event.queryStringParameters.completion);
@@ -115,7 +130,10 @@ exports.handler = async function(event, context) {
 
     //const pageUrl = `http://archiveofourown.org/tags/${tag}/works?page=${pageNumber}`;
 
-    var pageUrl = `http://archiveofourown.org/tags/${tag}/works?commit=Sort+and+Filter&page=${pageNumber}&utf8=%E2%9C%93`;
+    //var pageUrl = `http://archiveofourown.org/tags/${tag}/works?commit=Sort+and+Filter&page=${pageNumber}&utf8=%E2%9C%93`;
+
+    var pageUrl = getBaseUrlForPageType(pageType, searchQuery, pageNumber);
+
     pageUrl += `&work_search%5Bcomplete%5D=${completionQuery}`;
     pageUrl +=`&work_search%5Bcrossover%5D=${crossoverQuery}`;
     pageUrl +=`&work_search%5Bdate_from%5D=${dateFromQuery}`;
