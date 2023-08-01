@@ -50,7 +50,7 @@ async function scrapeFanficsOnPage(url){
     let fics = [];
 
     try{
-        const{data} = await axios.get(url);
+        const{data} = await axios.get(url, {timeout: 30000});
 
         const parser = new Parser();
         fics = parser.parsePageForFanficObjects(data)
